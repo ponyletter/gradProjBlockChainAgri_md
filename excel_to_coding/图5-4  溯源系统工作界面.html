@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>农产品溯源系统功能与技术架构</title>
+    <style>
+        :root {
+            --primary-color: #3b66f5; /* 图片中的亮蓝色 */
+            --bg-color: #f6f7f9;
+            --card-bg: #ffffff;
+            --text-main: #333333;
+            --text-secondary: #666666;
+            --tag-bg: #eef2fe;
+            --tag-text: #3b66f5;
+        }
+
+        body {
+            font-family: 'Helvetica Neue', Helvetica, 'PingFang SC', 'Microsoft YaHei', Arial, sans-serif;
+            background-color: var(--bg-color);
+            margin: 0;
+            padding: 40px;
+            color: var(--text-main);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* 功能模块网格布局 */
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+            margin-bottom: 60px;
+        }
+
+        /* 响应式调整：屏幕变窄时自动换行 */
+        @media (max-width: 992px) {
+            .grid-container {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        @media (max-width: 768px) {
+            .grid-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* 卡片样式 */
+        .card {
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+            transition: transform 0.2s;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(59, 102, 245, 0.15);
+        }
+
+        /* 卡片头部 */
+        .card-header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        .card-header svg {
+            width: 20px;
+            height: 20px;
+            fill: white;
+            opacity: 0.9;
+        }
+
+        /* 卡片内容区 */
+        .card-body {
+            padding: 20px;
+            flex-grow: 1;
+        }
+
+        .sub-title {
+            color: var(--primary-color);
+            font-weight: bold;
+            font-size: 14px;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        li {
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+            line-height: 1.6;
+            position: relative;
+            padding-left: 12px;
+        }
+
+        li::before {
+            content: "•";
+            color: var(--primary-color);
+            font-weight: bold;
+            position: absolute;
+            left: 0;
+        }
+
+        /* 技术栈区域 */
+        .tech-section {
+            text-align: center;
+        }
+
+        .section-title {
+            color: var(--primary-color);
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 30px;
+        }
+
+        .tech-grid {
+            display: flex;
+            justify-content: center;
+            gap: 24px;
+            flex-wrap: wrap;
+        }
+
+        .tech-card {
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            padding: 30px;
+            width: 280px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .tech-card-title {
+            color: var(--primary-color);
+            font-weight: bold;
+            margin-bottom: 20px;
+            font-size: 18px;
+        }
+
+        .tags {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .tag {
+            background-color: var(--tag-bg);
+            color: var(--tag-text);
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <!-- 功能模块区域 -->
+    <div class="grid-container">
+        
+        <!-- 管理员功能 -->
+        <div class="card">
+            <div class="card-header">
+                管理员功能
+                <!-- 简单的 SVG 图标 -->
+                <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+            </div>
+            <div class="card-body">
+                <span class="sub-title">用户管理</span>
+                <ul>
+                    <li>用户启用/禁用 (基于 RBAC 权限控制)</li>
+                    <li>系统日志审计与监控</li>
+                    <li>链上数据概览与节点状态查看</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- 种植商功能 -->
+        <div class="card">
+            <div class="card-header">
+                种植商功能
+                <svg viewBox="0 0 24 24"><path d="M2 22h20v-2h-2v-8h2v-2h-2v-2h-2V6h2V4h-2V2h-2v2h-2v2h-2v2h-2v2H6v2H4v2H2v8zM12 4v2h2v2h-2v2h2v2h-2v2h2v8h-2v-8h-2v-2h2v-2h-2v-2h2V6h-2V4h2z"/></svg>
+            </div>
+            <div class="card-body">
+                <span class="sub-title">农产品管理</span>
+                <ul>
+                    <li>添加农产品 (名称、温度、环境湿度、pH值、光照强度、土壤湿度、生产地、所属国家)</li>
+                    <li>农产品列表查看与上链状态确认</li>
+                    <li>环境数据自动采集 (模拟 IoT 接口)</li>
+                    <li>发货管理 (选择加工商，生成溯源二维码)</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- 加工商功能 -->
+        <div class="card">
+            <div class="card-header">
+                加工商功能
+                <svg viewBox="0 0 24 24"><path d="M22 13h-8v-2h8v2zm0-6h-8v2h8V7zm-8 10h8v-2h-8v2zm-2-8v6c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V9c0-1.1.9-2 2-2h6c1.1 0 2 .9 2 2zm-1.5 6l-2.25-3-1.75 2.26-1.25-1.51L3.5 15h7z"/></svg>
+            </div>
+            <div class="card-body">
+                <span class="sub-title">加工管理</span>
+                <ul>
+                    <li>农产品加工 (加工厂名称、质检人员、加工人员、加工时间)</li>
+                    <li>上传质检报告 (PDF/图片 -> IPFS存储)</li>
+                    <li>加工记录查看与追溯</li>
+                    <li>发货管理 (选择储运商、经销商)</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- 储运商功能 -->
+        <div class="card">
+            <div class="card-header">
+                储运商功能
+                <svg viewBox="0 0 24 24"><path d="M20 8h-3V4H3c-1.1 0-2 .9-2 2v11h2c0 1.66 1.34 3 3 3s3-1.34 3-3h6c0 1.66 1.34 3 3 3s3-1.34 3-3h2v-5l-3-4zM6 18.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm13.5-9l1.96 2.5H17V9.5h2.5zm-1.5 9c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg>
+            </div>
+            <div class="card-body">
+                <span class="sub-title">运输管理</span>
+                <ul>
+                    <li>运输信息记录 (仓储地点、运输人、出发地、目的地、出发时间、到达时间)</li>
+                    <li>冷链温度数据监控</li>
+                    <li>运输记录查看</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- 经销商功能 -->
+        <div class="card">
+            <div class="card-header">
+                经销商功能
+                <svg viewBox="0 0 24 24"><path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49c.08-.14.12-.31.12-.48 0-.55-.45-1-1-1H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z"/></svg>
+            </div>
+            <div class="card-body">
+                <span class="sub-title">销售管理</span>
+                <ul>
+                    <li>商品销售 (商城名称、商品价格、上架时间、促销信息)</li>
+                    <li>销售记录查看</li>
+                    <li>消费者扫码数据统计</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- 技术栈区域 -->
+    <div class="tech-section">
+        <h2 class="section-title">技术栈</h2>
+        <div class="tech-grid">
+            
+            <!-- 后端技术栈 -->
+            <div class="tech-card">
+                <div class="tech-card-title">后端</div>
+                <div class="tags">
+                    <!-- 根据实际 Go 环境修改 -->
+                    <span class="tag">Go (Golang) 1.22</span>
+                    <span class="tag">Gin Web Framework</span>
+                    <span class="tag">GORM</span>
+                    <span class="tag">MySQL 8.0</span>
+                    <span class="tag">Redis 8.0</span>
+                    <span class="tag">Docker</span>
+                </div>
+            </div>
+
+            <!-- 区块链技术栈 -->
+            <div class="tech-card">
+                <div class="tech-card-title">区块链</div>
+                <div class="tags">
+                    <span class="tag">Hyperledger Fabric 2.x</span>
+                    <span class="tag">Fabric Go SDK</span>
+                    <span class="tag">Docker Compose</span>
+                    <span class="tag">IPFS (Kubo)</span>
+                    <span class="tag">Hyperledger Explorer</span>
+                </div>
+            </div>
+
+            <!-- 前端技术栈 -->
+            <div class="tech-card">
+                <div class="tech-card-title">前端</div>
+                <div class="tags">
+                    <span class="tag">Vue 3</span>
+                    <span class="tag">Vite</span>
+                    <span class="tag">Pinia</span>
+                    <span class="tag">Vue Router</span>
+                    <span class="tag">Element Plus</span>
+                    <span class="tag">Axios</span>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
